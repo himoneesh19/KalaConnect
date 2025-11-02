@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KalaConnect - AI-Powered Media Processing</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div id="login-screen" class="screen">
+            <div class="container">
+                <h1>KalaConnect</h1>
+                <p>AI-Powered Media Processing Platform</p>
+                <button id="login-btn" class="btn btn-primary">Login with Google</button>
+                <div id="login-status"></div>
+            </div>
+        </div>
+
+        <div id="media-list-screen" class="screen hidden">
+            <header>
+                <h1>Media Library</h1>
+                <button id="upload-btn" class="btn btn-secondary">Upload Media</button>
+                <button id="logout-btn" class="btn btn-outline">Logout</button>
+            </header>
+            <div id="media-list" class="media-grid">
+                <!-- Media items will be populated here -->
+            </div>
+        </div>
+
+        <div id="upload-screen" class="screen hidden">
+            <header>
+                <h1>Upload Media</h1>
+                <button id="back-to-list-btn" class="btn btn-outline">Back to Library</button>
+            </header>
+            <div class="container">
+                <div id="camera-container">
+                    <video id="camera-preview" autoplay playsinline></video>
+                    <canvas id="capture-canvas" style="display: none;"></canvas>
+                    <div class="camera-controls">
+                        <button id="capture-btn" class="btn btn-primary">Capture</button>
+                        <button id="retake-btn" class="btn btn-secondary hidden">Retake</button>
+                        <button id="upload-captured-btn" class="btn btn-success hidden">Upload</button>
+                    </div>
+                </div>
+                <div id="preview-container" class="hidden">
+                    <img id="captured-image" alt="Captured image">
+                </div>
+                <div id="upload-status"></div>
+            </div>
+        </div>
+
+        <div id="product-detail-screen" class="screen hidden">
+            <header>
+                <h1>Product Details</h1>
+                <button id="back-to-media-btn" class="btn btn-outline">Back to Library</button>
+            </header>
+            <div id="product-details" class="container">
+                <!-- Product details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/upload.js"></script>
+    <script src="js/media.js"></script>
+</body>
+</html>

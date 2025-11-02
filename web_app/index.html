@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KalaConnect - AI-Powered Media Processing</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <!-- Google Translate API -->
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <div class="container">
+                <h1>KalaConnect</h1>
+                <p>AI-Powered Media Processing Platform</p>
+                <div class="login-options">
+                    <button id="login-google-btn" class="btn btn-primary"><i class="fab fa-google"></i> Login with Google</button>
+                    <button id="login-guest-btn" class="btn btn-secondary"><i class="fas fa-user"></i> Continue as Guest</button>
+                </div>
+                <div id="login-status"></div>
+                <div class="language-selector">
+                    <label for="language-select">Language:</label>
+                    <select id="language-select" aria-label="Select language" title="Select language">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="as">অসমীয়া</option>
+                        <option value="bn">বাংলা</option>
+                        <option value="bho">भोजपुरी</option>
+                        <option value="doi">डोगरी</option>
+                        <option value="gu">ગુજરાતી</option>
+                        <option value="gon">गोंडी</option>
+                        <option value="mai">मैथिली</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="mni">মৈতৈলোন্</option>
+                        <option value="mr">मराठी</option>
+                        <option value="ne">नेपाली</option>
+                        <option value="or">ଓଡ଼ିଆ</option>
+                        <option value="pa">ਪੰਜਾਬੀ</option>
+                        <option value="sa">संस्कृतम्</option>
+                        <option value="sd">سنڌي</option>
+                        <option value="si">සිංහල</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ur">اردو</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Story Weaver Screen -->
+        <div id="story-weaver-screen" class="screen hidden">
+            <header>
+                <div class="nav-container">
+                    <h1>Story Weaver</h1>
+                    <nav class="main-nav">
+                        <a href="#" class="nav-link active" data-screen="story-weaver">Story Weaver</a>
+                        <a href="#" class="nav-link" data-screen="digital-studio">Digital Studio</a>
+                        <a href="#" class="nav-link" data-screen="trend-weaver">Trend Weaver</a>
+                        <a href="#" class="nav-link" data-screen="market-navigator">Market Navigator</a>
+                    </nav>
+                    <button id="logout-btn-story" class="btn btn-outline">Logout</button>
+                </div>
+            </header>
+            <div class="container">
+                <div class="feature-description">
+                    <h2>Voice-to-Story Engine</h2>
+                    <p>Record audio/video in your local language and let AI transcribe, translate, and craft compelling stories.</p>
+                </div>
+                <div id="story-recorder">
+                    <div class="recording-controls">
+                        <button id="start-story-recording" class="btn btn-primary"><i class="fas fa-microphone"></i> Start Recording</button>
+                        <button id="stop-story-recording" class="btn btn-danger hidden"><i class="fas fa-stop"></i> Stop Recording</button>
+                        <button id="generate-story" class="btn btn-success hidden"><i class="fas fa-magic"></i> Generate Story</button>
+                    </div>
+                    <div id="recording-status"></div>
+                    <div id="story-output" class="hidden">
+                        <h3>Generated Story</h3>
+                        <div id="story-content"></div>
+                        <button id="save-story" class="btn btn-secondary"><i class="fas fa-save"></i> Save Story</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Digital Studio Screen -->
+        <div id="digital-studio-screen" class="screen hidden">
+            <header>
+                <div class="nav-container">
+                    <h1>Digital Studio</h1>
+                    <nav class="main-nav">
+                        <a href="#" class="nav-link" data-screen="story-weaver">Story Weaver</a>
+                        <a href="#" class="nav-link active" data-screen="digital-studio">Digital Studio</a>
+                        <a href="#" class="nav-link" data-screen="trend-weaver">Trend Weaver</a>
+                        <a href="#" class="nav-link" data-screen="market-navigator">Market Navigator</a>
+                    </nav>
+                    <button id="logout-btn-studio" class="btn btn-outline">Logout</button>
+                </div>
+            </header>
+            <div class="container">
+                <div class="feature-description">
+                    <h2>Generative Product Photography</h2>
+                    <p>Remove backgrounds, enhance images, and place products in AI-generated mockups.</p>
+                </div>
+                <div id="studio-workspace">
+                    <div class="studio-controls">
+                        <div class="input-options">
+                            <div class="file-input-group">
+                                <label for="studio-file-input">Select Image File:</label>
+                                <input type="file" id="studio-file-input" accept="image/*" title="Select an image file" class="btn btn-outline">
+                            </div>
+                            <div class="camera-input-group">
+                                <button id="capture-camera-btn" class="btn btn-outline"><i class="fas fa-camera"></i> Take Photo</button>
+                            </div>
+                        </div>
+                        <div class="processing-options">
+                            <button id="remove-bg-btn" class="btn btn-secondary"><i class="fas fa-eraser"></i> Remove Background</button>
+                            <button id="enhance-btn" class="btn btn-secondary"><i class="fas fa-magic"></i> Enhance Image</button>
+                            <button id="generate-mockup-btn" class="btn btn-secondary"><i class="fas fa-image"></i> Generate Mockup</button>
+                        </div>
+                    </div>
+                    <!-- Camera capture modal -->
+                    <div id="camera-modal" class="modal hidden">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3>Take Photo</h3>
+                                <button id="close-camera-modal" class="close-btn">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <video id="camera-stream" autoplay playsinline></video>
+                                <canvas id="camera-canvas" class="hidden"></canvas>
+                                <div class="camera-controls">
+                                    <button id="capture-photo-btn" class="btn btn-primary"><i class="fas fa-camera"></i> Capture</button>
+                                    <button id="retake-photo-btn" class="btn btn-secondary hidden"><i class="fas fa-redo"></i> Retake</button>
+                                    <button id="use-photo-btn" class="btn btn-success hidden"><i class="fas fa-check"></i> Use Photo</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="studio-canvas">
+                        <div id="original-image-container">
+                            <img id="original-image" alt="Original image" class="hidden">
+                        </div>
+                        <div id="processed-image-container" class="hidden">
+                            <img id="processed-image" alt="Processed image">
+                        </div>
+                    </div>
+                    <div class="history-controls">
+                        <button id="load-history-btn" class="btn btn-secondary"><i class="fas fa-history"></i> Load History</button>
+                    </div>
+                    <div id="image-history" class="hidden">
+                        <h3>Your Image History</h3>
+                        <div id="history-gallery" class="history-gallery"></div>
+                    </div>
+                    <div id="studio-status"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trend Weaver Screen -->
+        <div id="trend-weaver-screen" class="screen hidden">
+            <header>
+                <div class="nav-container">
+                    <h1>Trend Weaver</h1>
+                    <nav class="main-nav">
+                        <a href="#" class="nav-link" data-screen="story-weaver">Story Weaver</a>
+                        <a href="#" class="nav-link" data-screen="digital-studio">Digital Studio</a>
+                        <a href="#" class="nav-link active" data-screen="trend-weaver">Trend Weaver</a>
+                        <a href="#" class="nav-link" data-screen="market-navigator">Market Navigator</a>
+                    </nav>
+                    <button id="logout-btn-trend" class="btn btn-outline">Logout</button>
+                </div>
+            </header>
+            <div class="container">
+                <div class="feature-description">
+                    <h2>Market & Design Insights</h2>
+                    <p>Get AI-powered suggestions for trends, colors, and design elements.</p>
+                </div>
+                <div id="trend-dashboard">
+                    <div class="trend-controls">
+                        <label for="trend-category">Trend Category:</label>
+                        <select id="trend-category" aria-label="Select trend category" title="Select trend category">
+                            <option value="fashion">Fashion</option>
+                            <option value="home">Home Decor</option>
+                            <option value="art">Art & Design</option>
+                        </select>
+                        <button id="generate-trends" class="btn btn-primary"><i class="fas fa-chart-line"></i> Generate Insights</button>
+                    </div>
+                    <div id="trend-results">
+                        <div id="color-trends" class="trend-section">
+                            <h3>Color Trends</h3>
+                            <div id="color-palette"></div>
+                        </div>
+                        <div id="design-trends" class="trend-section">
+                            <h3>Design Trends</h3>
+                            <div id="design-insights"></div>
+                        </div>
+                        <div id="market-trends" class="trend-section">
+                            <h3>Market Insights</h3>
+                            <div id="market-insights"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Navigator Screen -->
+        <div id="market-navigator-screen" class="screen hidden">
+            <header>
+                <div class="nav-container">
+                    <h1>Market Navigator</h1>
+                    <nav class="main-nav">
+                        <a href="#" class="nav-link" data-screen="story-weaver">Story Weaver</a>
+                        <a href="#" class="nav-link" data-screen="digital-studio">Digital Studio</a>
+                        <a href="#" class="nav-link" data-screen="trend-weaver">Trend Weaver</a>
+                        <a href="#" class="nav-link active" data-screen="market-navigator">Market Navigator</a>
+                    </nav>
+                    <button id="logout-btn-market" class="btn btn-outline">Logout</button>
+                </div>
+            </header>
+            <div class="container">
+                <div class="feature-description">
+                    <h2>AI-Driven Sales & Communication</h2>
+                    <p>Smart pricing suggestions and real-time chat translation for global markets.</p>
+                </div>
+                <div id="market-tools">
+                    <div class="pricing-tool">
+                        <h3>Smart Pricing</h3>
+                        <div class="pricing-inputs">
+                            <label for="product-name">Product Name:</label>
+                            <input type="text" id="product-name" placeholder="Product name" title="Product name" class="form-input">
+                            <label for="base-price">Base Price:</label>
+                            <input type="number" id="base-price" placeholder="Base price" title="Base price" class="form-input" step="0.01">
+                            <label for="target-market">Target Market:</label>
+                        <select id="target-market" aria-label="Select target market" title="Select target market">
+                                <option value="local">Local Market</option>
+                                <option value="national">National Market</option>
+                                <option value="international">International Market</option>
+                            </select>
+                            <button id="calculate-price" class="btn btn-primary"><i class="fas fa-calculator"></i> Calculate Price</button>
+                        </div>
+                        <div id="pricing-results"></div>
+                    </div>
+                    <div class="chat-translator">
+                        <h3>Chat Translator</h3>
+                        <div class="chat-interface">
+                            <div id="chat-messages"></div>
+                            <div class="chat-input">
+                                <label for="chat-input" class="sr-only">Type your message</label>
+                                <input type="text" id="chat-input" placeholder="Type your message..." title="Type your message" class="form-input">
+                        <label for="target-language" class="sr-only">Target Language</label>
+                        <select id="target-language" aria-label="Select target language" title="Select target language">
+                            <option value="en">English</option>
+                            <option value="hi">हिंदी</option>
+                            <option value="as">অসমীয়া</option>
+                            <option value="bn">বাংলা</option>
+                            <option value="bho">भोजपुरी</option>
+                            <option value="doi">डोगरी</option>
+                            <option value="gu">ગુજરાતી</option>
+                            <option value="gon">गोंडी</option>
+                            <option value="mai">मैथिली</option>
+                            <option value="ml">മലയാളം</option>
+                            <option value="mni">মৈতৈলোন্</option>
+                            <option value="mr">मराठी</option>
+                            <option value="ne">नेपाली</option>
+                            <option value="or">ଓଡ଼ିଆ</option>
+                            <option value="pa">ਪੰਜਾਬੀ</option>
+                            <option value="sa">संस्कृतम्</option>
+                            <option value="sd">سنڌي</option>
+                            <option value="si">සිංහල</option>
+                            <option value="ta">தமிழ்</option>
+                            <option value="te">తెలుగు</option>
+                            <option value="ur">اردو</option>
+                        </select>
+                                <button id="send-chat" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+
+    <script src="js/story-weaver.js"></script>
+    <script src="js/digital-studio.js"></script>
+    <script src="js/trend-weaver.js"></script>
+    <script src="js/market-navigator.js"></script>
+    <script src="js/translate.js"></script>
+
+</body>
+</html>
