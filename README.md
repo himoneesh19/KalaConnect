@@ -2,6 +2,8 @@
 
 A web application for AI-powered media processing and product creation using webcam uploads.
 
+**Live Demo**: [https://genai-9bcd4.web.app/#](https://genai-9bcd4.web.app/#)
+
 ## Current Status
 
 **Hackathon Implementation Complete**: The project has successfully implemented multiple digital marketing and marketplace features as part of a hackathon. Frontend screens, backend APIs, and basic functionality have been developed with mock data integration.
