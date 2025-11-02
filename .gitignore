@@ -137,6 +137,7 @@ service-account-key.json
 # Web app
 web_app/node_modules/
 web_app/package-lock.json
+web_app/firebase-config.js
 
 # IDE
 .vscode/
